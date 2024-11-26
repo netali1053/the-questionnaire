@@ -4,34 +4,31 @@ const email = document.querySelector('#email');
 const secondName = document.querySelector('#secondName');
 const phone = document.querySelector('#phone');
 const agreeCheckbox = document.querySelector('#agree');
-const sendBtn = document.querySelector('#button');
-const clearBtn = document.querySelector('#clear');
 const info = document.querySelector('.info-container');
 const title = document.querySelector('h1');
 
-form.addEventListener("submit", async function(event) {
+form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    sendBtn.addEventListener('click', async function() {
-        try {
-            const request = await fetch(`https://polinashneider.space/user`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer: netali1053'
-                },
-                body: JSON.stringify({
-                    "name": nameInput.value,
-                    "secondName": secondName.value,
-                    "phone": phone.value,
-                    "email": email.value,
-                    "agree": agreeCheckbox.checked
-                }),
-            })
-
-            const data = await request.json();
-
+    fetch(`https://polinashneider.space/user`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer: netali1053'
+            },
+            body: JSON.stringify({
+                "name": nameInput.value,
+                "secondName": secondName.value,
+                "phone": phone.value,
+                "email": email.value,
+                "agree": agreeCheckbox.checked
+            }),
+        })
+        .then((data) => {
+            return data.json();
+        })
+        .then((data) => {
             if (data) {
                 info.classList.remove('hidden');
                 title.classList.add('hidden');
@@ -44,9 +41,8 @@ form.addEventListener("submit", async function(event) {
 
                 info.append(textOk);
             }
-
-        } catch (error) {
-            alert("Произошла ошибка!", error)
-        }
-    })
-})
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
